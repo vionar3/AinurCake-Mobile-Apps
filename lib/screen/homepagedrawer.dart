@@ -1,8 +1,8 @@
-// import 'package:cakecraft/about/about_us.dart';
-// import 'package:cakecraft/feedback/userfeedback.dart';
-// import 'package:cakecraft/screen/changepassword.dart';
+import 'package:ainurcake/about/about_us.dart';
+import 'package:ainurcake/feedback/userfeedback.dart';
+import 'package:ainurcake/screen/changepassword.dart';
 import 'package:ainurcake/screen/signin.dart';
-// import 'package:cakecraft/screen/contact.dart';
+import 'package:ainurcake/screen/contact.dart';
 // import 'package:cakecraft/screen/user_profile.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -113,9 +113,9 @@ class _HomDrawerState extends State<HomDrawer> {
               ),
               title: const Text('About us'),
               onTap: () {
-                print("aboutus");
-                // Navigator.of(context).push(
-                //     MaterialPageRoute(builder: (context) => const AboutUs()));
+                // print("aboutus");
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const AboutUs()));
               },
             ),
             ListTile(
@@ -125,9 +125,9 @@ class _HomDrawerState extends State<HomDrawer> {
               ),
               title: const Text('Feedback'),
               onTap: () {
-                print("userfeedback");
-                // Navigator.of(context).push(MaterialPageRoute(
-                //     builder: (context) => const UserFeedback()));
+                // print("userfeedback");
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const UserFeedback()));
               },
             ),
             ListTile(
@@ -137,9 +137,9 @@ class _HomDrawerState extends State<HomDrawer> {
               ),
               title: const Text('Change Password'),
               onTap: () {
-                print("changepassword");
-                // Navigator.of(context).push(MaterialPageRoute(
-                //     builder: (context) => const ChangePassword()));
+                // print("changepassword");
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const ChangePassword()));
               },
             ),
             ListTile(
@@ -149,9 +149,9 @@ class _HomDrawerState extends State<HomDrawer> {
               ),
               title: const Text('Contact us'),
               onTap: () {
-                print("contactcus");
-                // Navigator.of(context).push(
-                //     MaterialPageRoute(builder: (context) => const ContactUs()));
+                // print("contactcus");
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const ContactUs()));
               },
             ),
             ListTile(

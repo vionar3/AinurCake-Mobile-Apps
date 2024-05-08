@@ -1,14 +1,14 @@
 import 'dart:io';
 import 'package:ainurcake/button/animated_button.dart';
 import 'package:ainurcake/helper_widget/custom_card.dart';
-// import 'package:cakecraft/map/google_map.dart';
+// import 'package:ainurcake/map/google_map.dart';
 import 'package:ainurcake/model/cart_model.dart';
 import 'package:ainurcake/model/product_model.dart';
-// import 'package:cakecraft/screen/cake_screen.dart';
+import 'package:ainurcake/screen/cake_screen.dart';
 // import 'package:cakecraft/screen/checkloginregister.dart';
 // import 'package:cakecraft/screen/customizecakes.dart';
 // import 'package:cakecraft/screen/homepagedrawer.dart';
-// import 'package:ainurcake/screen/view_all.dart';
+import 'package:ainurcake/screen/view_all.dart';
 import 'package:ainurcake/slider/slidder.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -95,30 +95,30 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Cake Craft'),
-          // bottom: PreferredSize(
-          //   preferredSize: const Size.fromHeight(45),
-          //   child: SizedBox(
-          //     height: 50,
-          //     child: Padding(
-          //       padding:
-          //       const EdgeInsets.only(left: 30, right: 30, top: 5, bottom: 5),
-          //       child: TextFormField(
-          //         controller: searchController,
-          //         keyboardType: TextInputType.text,
-          //         textInputAction: TextInputAction.done,
-          //         decoration: InputDecoration(
-          //             hintText: 'Search',
-          //             fillColor: Colors.white,
-          //             filled: true,
-          //             suffixIcon: const Icon(Icons.search),
-          //             border: OutlineInputBorder(
-          //                 borderSide: BorderSide.none,
-          //                 borderRadius: BorderRadius.circular(10)),
-          //             contentPadding: const EdgeInsets.fromLTRB(15, 0, 0, 0)),
-          //       ),
-          //     ),
-          //   ),
-          // ),
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(45),
+            child: SizedBox(
+              height: 50,
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 30, right: 30, top: 5, bottom: 5),
+                child: TextFormField(
+                  controller: searchController,
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.done,
+                  decoration: InputDecoration(
+                      hintText: 'Search',
+                      fillColor: Colors.white,
+                      filled: true,
+                      suffixIcon: const Icon(Icons.search),
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(10)),
+                      contentPadding: const EdgeInsets.fromLTRB(15, 0, 0, 0)),
+                ),
+              ),
+            ),
+          ),
         ),
         drawer: const HomDrawer(),
         body: SingleChildScrollView(
@@ -143,7 +143,7 @@ class _HomePageState extends State<HomePage> {
                     //     padding: const EdgeInsets.only(
                     //         top: 20, bottom: 10, right: 10),
                     //     child: SizedBox(
-                    //       width: 120,
+                    //       width: 150,
                     //       height: 32,
                     //       child: TextButton.icon(
                     //         style: ButtonStyle(
@@ -166,61 +166,61 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 const CarSlider(),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     const Padding(
-                //       padding: EdgeInsets.only(left: 10),
-                //       child: Text('Available Now'),
-                //     ),
-                //     Padding(
-                //       padding: const EdgeInsets.only(right: 5),
-                //       child: Row(
-                //         children: [
-                //           TextButton(
-                //             onPressed: () {
-                //               Navigator.of(context).push(MaterialPageRoute(
-                //                   builder: (context) => const ViewCake()));
-                //             },
-                //             child: const Text('View All'),
-                //           ),
-                //         ],
-                //       ),
-                //     )
-                //   ],
-                // ),
-                // Row(
-                //   children: [
-                //     Expanded(
-                //       child: SizedBox(
-                //         height: 295,
-                //         child: GridView.builder(
-                //           gridDelegate:
-                //               const SliverGridDelegateWithFixedCrossAxisCount(
-                //                   crossAxisCount: 2, mainAxisExtent: 180),
-                //           itemCount: prDetail2.length,
-                //           scrollDirection: Axis.horizontal,
-                //           shrinkWrap: true,
-                //           itemBuilder: (BuildContext context, int index) {
-                //             return CustomCard(
-                //               cpic: prDetail2[index].images,
-                //               cname: prDetail2[index].name,
-                //               onTap: () {
-                //                 getCake(prDetail2[index].name);
-                //                 var temp = getCake(prDetail2[index].name);
-                //                 Navigator.of(context).push(MaterialPageRoute(
-                //                     builder: (context) => CakeScreen(
-                //                           temp: '$temp',
-                //                           cartDetail: cartdetail,
-                //                         )));
-                //               },
-                //             );
-                //           },
-                //         ),
-                //       ),
-                //     ),
-                //   ],
-                // ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Text('Available Now'),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 5),
+                      child: Row(
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => const ViewCake()));
+                            },
+                            child: const Text('View All'),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 295,
+                        child: GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2, mainAxisExtent: 180),
+                          itemCount: prDetail2.length,
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemBuilder: (BuildContext context, int index) {
+                            return CustomCard(
+                              cpic: prDetail2[index].images,
+                              cname: prDetail2[index].name,
+                              onTap: () {
+                                getCake(prDetail2[index].name);
+                                var temp = getCake(prDetail2[index].name);
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => CakeScreen(
+                                          temp: '$temp',
+                                          cartDetail: cartdetail,
+                                        )));
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 const SizedBox(
                   height: 20,
                 ),
