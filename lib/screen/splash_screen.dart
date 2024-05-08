@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:ainurcake/screen/checkloginregister.dart';
+import 'package:ainurcake/screen/signin.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -16,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(
         const Duration(seconds: 3),
         () => Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const Check())));
+            MaterialPageRoute(builder: (context) => const Signin())));
     super.initState();
   }
 
