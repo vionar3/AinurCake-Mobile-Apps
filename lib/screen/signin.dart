@@ -1,6 +1,6 @@
 // import 'package:cakecraft/admin_panel/admin_homepage.dart';
 import 'package:ainurcake/screen/forgot_password.dart';
-// import 'package:cakecraft/screen/homepage.dart';
+import 'package:ainurcake/screen/homepage.dart';
 import 'package:ainurcake/screen/signup.dart';
 import 'package:ainurcake/screen/test.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -228,10 +228,10 @@ class _SigninState extends State<Signin> {
                                     borderRadius: BorderRadius.circular(10)))),
                         onPressed: () {
                           //   signIn(emailController.text, passwordController.text);
-                          print("login");
-                          // Navigator.of(context).pushReplacement(
-                          //     MaterialPageRoute(
-                          //         builder: (context) => const HomePage()));
+                          // print("login");
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) => const HomePage()));
                         },
                         child: const Text(
                           'Log in',
