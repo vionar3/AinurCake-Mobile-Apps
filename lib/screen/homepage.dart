@@ -7,7 +7,6 @@ import 'package:ainurcake/model/product_model.dart';
 import 'package:ainurcake/screen/cake_screen.dart';
 // import 'package:cakecraft/screen/checkloginregister.dart';
 // import 'package:cakecraft/screen/customizecakes.dart';
-// import 'package:cakecraft/screen/homepagedrawer.dart';
 import 'package:ainurcake/screen/view_all.dart';
 import 'package:ainurcake/slider/slidder.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
@@ -94,6 +93,7 @@ class _HomePageState extends State<HomePage> {
       onWillPop: () => showExitPopup(context),
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.blue,
           title: const Text('Cake Craft'),
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(45),
@@ -192,30 +192,33 @@ class _HomePageState extends State<HomePage> {
                 Row(
                   children: [
                     Expanded(
-                      child: SizedBox(
-                        height: 295,
-                        child: GridView.builder(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2, mainAxisExtent: 180),
-                          itemCount: prDetail2.length,
-                          scrollDirection: Axis.horizontal,
-                          shrinkWrap: true,
-                          itemBuilder: (BuildContext context, int index) {
-                            return CustomCard(
-                              cpic: prDetail2[index].images,
-                              cname: prDetail2[index].name,
-                              onTap: () {
-                                getCake(prDetail2[index].name);
-                                var temp = getCake(prDetail2[index].name);
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => CakeScreen(
-                                          temp: '$temp',
-                                          cartDetail: cartdetail,
-                                        )));
-                              },
-                            );
-                          },
+                      child: Container(
+                        // color: Colors.blue,
+                        child: SizedBox(
+                          height: 375,
+                          child: GridView.builder(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2, mainAxisExtent: 180),
+                            itemCount: prDetail2.length,
+                            scrollDirection: Axis.horizontal,
+                            shrinkWrap: true,
+                            itemBuilder: (BuildContext context, int index) {
+                              return CustomCard(
+                                cpic: prDetail2[index].images,
+                                cname: prDetail2[index].name,
+                                onTap: () {
+                                  getCake(prDetail2[index].name);
+                                  var temp = getCake(prDetail2[index].name);
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => CakeScreen(
+                                            temp: '$temp',
+                                            cartDetail: cartdetail,
+                                          )));
+                                },
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ),

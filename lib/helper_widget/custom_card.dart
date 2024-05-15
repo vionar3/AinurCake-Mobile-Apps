@@ -5,7 +5,7 @@ class CustomCard extends StatefulWidget {
   final String? cname;
   final Function()? onTap;
 
-  CustomCard({this.cpic,this.cname,this.onTap});
+  CustomCard({this.cpic, this.cname, this.onTap});
 
   @override
   State<CustomCard> createState() => _CustomCardState();
@@ -15,33 +15,55 @@ class _CustomCardState extends State<CustomCard> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 110,
-      width: 100,
+      height: 200,
+      width: 200,
       child: InkWell(
         onTap: widget.onTap,
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10)
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 2.0,
+                blurRadius: 3.0,
+              )
+            ],
+            color: Colors.white,
           ),
           child: Column(
             children: [
-              CircleAvatar(
-                maxRadius: 50,
-                backgroundColor: Colors.white,
-                child: Center(child: Image.asset(widget.cpic!)),
+              Container(
+                height: 120,
+                width: 120,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.0),
+                  image: DecorationImage(
+                    image: AssetImage(widget.cpic!),
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
-              const Divider(
-                height: 10,
-                color: Colors.blue,
-              ),
+              SizedBox(height: 12.0),
               Padding(
-                padding: const EdgeInsets.only(top: 5),
-                child: Text(widget.cname!,style: const TextStyle(fontSize: 12),),
+                padding: EdgeInsets.all(12.0),
+                child: Container(
+                  color: Colors.blue,
+                  height: 1.5,
+                ),
+              ),
+              Center(
+                child: Text(
+                  widget.cname!,
+                  style: TextStyle(
+                      color: const Color(0xFF575E67),
+                      fontFamily: 'Varela',
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
             ],
           ),
-          elevation: 2,
-          shadowColor: Colors.blue,
         ),
       ),
     );

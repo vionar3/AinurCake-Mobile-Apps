@@ -1,6 +1,6 @@
-// import 'package:cakecraft/cart/cart_page.dart';
+import 'package:ainurcake/cart/cart_page.dart';
 import 'package:ainurcake/model/cart_model.dart';
-// import 'package:cakecraft/screen/order_now.dart';
+import 'package:ainurcake/screen/order_now.dart';
 import 'package:flutter/material.dart';
 
 class ProductDetail extends StatefulWidget {
@@ -95,11 +95,11 @@ class _ProductDetailState extends State<ProductDetail> {
                                 image: widget.pr_picture,
                                 name: widget.pr_name,
                                 price: widget.price));
-                            print("carddetail");
-                            // Navigator.of(context).pushReplacement(
-                            //     MaterialPageRoute(
-                            //         builder: (context) =>
-                            //             Car ts(cartDetail: widget.cartdetail)));
+                            // print("carddetail");
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        Carts(cartDetail: widget.cartdetail)));
                           },
                           child: const Center(
                               child: Text(
@@ -127,11 +127,11 @@ class _ProductDetailState extends State<ProductDetail> {
                                   image: widget.pr_picture,
                                   name: widget.pr_name,
                                   price: widget.price));
-                              print("cardetail");
-                              // Navigator.of(context).pushReplacement(
-                              //     MaterialPageRoute(
-                              //         builder: (context) => OrderNow(
-                              //             cartDetail: widget.cartdetail)));
+                              // print("cardetail");
+                              Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) => OrderNow(
+                                          cartDetail: widget.cartdetail)));
                             },
                             child: const Text(
                               'Order Now',
