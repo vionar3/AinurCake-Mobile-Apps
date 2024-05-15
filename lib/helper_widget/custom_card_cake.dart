@@ -6,7 +6,7 @@ class CustomCardCake extends StatefulWidget {
   final int? price;
   final Function()? onTap;
 
-   CustomCardCake({this.pic='',this.name='',this.price,this.onTap});
+  CustomCardCake({this.pic = '', this.name = '', this.price, this.onTap});
   @override
   State<CustomCardCake> createState() => _CustomCardCakeState();
 }
@@ -17,26 +17,53 @@ class _CustomCardCakeState extends State<CustomCardCake> {
     return Scaffold(
       body: InkWell(
         onTap: widget.onTap,
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10)
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 2.0,
+                blurRadius: 3.0,
+              )
+            ],
+            color: Colors.white, // Set the background color to white
           ),
           child: Column(
             children: [
-              SizedBox(
-                height: 125,
-                child: Center(child: Image.asset(widget.pic!)),
+              Container(
+                height: 90,
+                width: 120,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.0),
+                  image: DecorationImage(
+                    image: AssetImage(widget.pic!),
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
-              const Divider(
-                height: 10,
-                color: Colors.blue,
+              SizedBox(height: 12.0),
+              Padding(
+                padding: EdgeInsets.all(12.0),
+                child: Container(
+                  color: Colors.blue,
+                  height: 1.5,
+                ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 5,left: 10),
-                    child: Text(widget.name!,),
+                    padding: const EdgeInsets.only(top: 5, left: 10),
+                    child: Text(
+                      widget.name!,
+                      style: TextStyle(
+                        color: const Color(0xFF575E67),
+                        fontFamily: 'Varela',
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -44,31 +71,36 @@ class _CustomCardCakeState extends State<CustomCardCake> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 5,left: 10),
-                    child: Text('Rs '+widget.price!.toString(),style: const TextStyle(fontSize: 13,fontWeight: FontWeight.bold),),
+                    padding: const EdgeInsets.only(top: 5, left: 10),
+                    child: Text(
+                      'Rs ' + widget.price!.toString(),
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 5,
-              ),
+              SizedBox(height: 10),
               Container(
                 height: 27,
                 width: 70,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: Colors.blue
-                  )
+                  border: Border.all(color: Colors.blue),
                 ),
-                child: const Center(child: Text('Order Now',style: TextStyle(color: Colors.blue,fontSize: 10),))),
+                child: Center(
+                  child: Text(
+                    'Order Now',
+                    style: TextStyle(color: Colors.blue, fontSize: 10),
+                  ),
+                ),
+              ),
             ],
           ),
-          elevation: 15,
-          shadowColor: Colors.blue,
         ),
       ),
     );
   }
-
 }

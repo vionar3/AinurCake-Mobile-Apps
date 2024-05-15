@@ -1,7 +1,7 @@
 import 'dart:core';
 // import 'package:cakecraft/admin_panel/admintmodel/addproductmodel.dart';
 import 'package:ainurcake/cake_detail/product_detail.dart';
-// import 'package:cakecraft/cart/cart_page.dart';
+import 'package:ainurcake/cart/cart_page.dart';
 import 'package:ainurcake/helper_widget/custom_card_cake.dart';
 import 'package:ainurcake/model/cake_model.dart';
 import 'package:ainurcake/model/cart_model.dart';
@@ -197,9 +197,9 @@ class _CakeScreenState extends State<ViewCake> {
             child: InkWell(
               child: const Icon(Icons.shopping_cart_rounded),
               onTap: () {
-                print("cardetail");
-                // Navigator.of(context).push(MaterialPageRoute(
-                //     builder: (context) => Carts(cartDetail: cartdetail)));
+                // print("cardetail");
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => Carts(cartDetail: cartdetail)));
               },
             ),
           ),

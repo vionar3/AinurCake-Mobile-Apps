@@ -242,6 +242,7 @@ class _CakeScreenState extends State<CakeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blue,
         title: const Text('Cake Craft'),
         leading: InkWell(
           child: const Icon(Icons.arrow_back),
