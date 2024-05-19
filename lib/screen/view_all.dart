@@ -1,12 +1,9 @@
 import 'dart:core';
-// import 'package:cakecraft/admin_panel/admintmodel/addproductmodel.dart';
 import 'package:ainurcake/cake_detail/product_detail.dart';
 import 'package:ainurcake/cart/cart_page.dart';
 import 'package:ainurcake/helper_widget/custom_card_cake.dart';
 import 'package:ainurcake/model/cake_model.dart';
 import 'package:ainurcake/model/cart_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ViewCake extends StatefulWidget {
@@ -19,22 +16,8 @@ class ViewCake extends StatefulWidget {
 class _CakeScreenState extends State<ViewCake> {
   TextEditingController searchController = TextEditingController();
   List<CartModel> cartdetail = [];
-  // User? user = FirebaseAuth.instance.currentUser;
-  // AddProductModel loggedInUser = AddProductModel();
-  @override
-  // void initState() {
-  //   super.initState();
-  //   FirebaseFirestore.instance
-  //       .collection("cakes")
-  //       .doc(user!.uid)
-  //       .get()
-  //       .then((value) {
-  //     loggedInUser = AddProductModel.fromMap(value.data());
-  //     setState(() {});
-  //   });
-  // }
 
-  List<CakeModel> All = [
+  List<CakeModel> allCakes = [
     CakeModel(
         id: 1,
         image: 'images/all/all1.png',
@@ -190,49 +173,56 @@ class _CakeScreenState extends State<ViewCake> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cake Craft'),
+        backgroundColor: Colors.blue,
+        title: const Text(
+          'Ainur Cake',
+          style: TextStyle(color: Colors.white),
+        ),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 8),
             child: InkWell(
               child: const Icon(Icons.shopping_cart_rounded),
               onTap: () {
-                // print("cardetail");
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => Carts(cartDetail: cartdetail)));
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => Carts(cartDetail: cartdetail)),
+                );
               },
             ),
           ),
         ],
       ),
       body: SingleChildScrollView(
-        child: Stack(
-          children: [
-            GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, mainAxisExtent: 230),
-              scrollDirection: Axis.vertical,
-              itemCount: All.length,
-              primary: false,
-              shrinkWrap: true,
-              itemBuilder: (BuildContext context, int index) {
-                return CustomCardCake(
-                  pic: All[index].image,
-                  name: All[index].name,
-                  price: All[index].price,
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ProductDetail(
-                              pr_picture: All[index].image,
-                              pr_name: All[index].name,
-                              price: All[index].price,
-                              cartdetail: cartdetail,
-                            )));
-                  },
+        child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, mainAxisExtent: 230),
+          scrollDirection: Axis.vertical,
+          itemCount: allCakes.length,
+          primary: false,
+          shrinkWrap: true,
+          itemBuilder: (BuildContext context, int index) {
+            return CustomCardCake(
+              pic: allCakes[index].image,
+              name: allCakes[index].name,
+              price: allCakes[index].price,
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ProductDetail(
+                      pr_picture: allCakes[index].image,
+                      pr_name: allCakes[index].name,
+                      price: allCakes[index].price,
+                      cartdetail: cartdetail,
+                    ),
+                  ),
                 );
               },
-            ),
-          ],
+            );
+          },
         ),
       ),
     );

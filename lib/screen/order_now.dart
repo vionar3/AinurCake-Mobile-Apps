@@ -1,11 +1,12 @@
 import 'package:ainurcake/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ainurcake/model/cart_model.dart';
 
 class OrderNow extends StatefulWidget {
-  final cartDetail;
-  OrderNow({this.cartDetail});
+  final List<CartModel> cartDetail;
+
+  OrderNow({required this.cartDetail});
 
   @override
   State<OrderNow> createState() => _OrderNowState();
@@ -13,40 +14,37 @@ class OrderNow extends StatefulWidget {
 
 class _OrderNowState extends State<OrderNow> {
   int gvalue = 1;
-  User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
-  @override
-  void initState() {
-    super.initState();
-    FirebaseFirestore.instance
-        .collection("users")
-        .doc(user!.uid)
-        .get()
-        .then((value) {
-      loggedInUser = UserModel.fromMap(value.data());
-      setState(() {});
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cake Craft'),
+        backgroundColor: Colors.blue,
+        title: const Text(
+          'Ainur Cake',
+          style: TextStyle(color: Colors.white),
+        ),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
       ),
       bottomNavigationBar: Container(
         height: 60,
         color: Colors.white,
         child: Expanded(
-            child: MaterialButton(
-          minWidth: MediaQuery.of(context).size.width,
-          onPressed: () {},
-          child: const Text(
-            'Proceed',
-            style: TextStyle(fontSize: 18, color: Colors.white),
+          child: MaterialButton(
+            minWidth: MediaQuery.of(context).size.width,
+            onPressed: () {
+              // Implement order saving functionality here
+            },
+            child: const Text(
+              'Proceed',
+              style: TextStyle(fontSize: 18, color: Colors.white),
+            ),
+            color: Colors.blue,
           ),
-          color: Colors.blue,
-        )),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -83,7 +81,6 @@ class _OrderNowState extends State<OrderNow> {
                             style: const TextStyle(
                               color: Colors.black,
                               fontSize: 20,
-                              //fontWeight: FontWeight.bold
                             ),
                           ),
                         ],
@@ -119,13 +116,14 @@ class _OrderNowState extends State<OrderNow> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Radio(
-                          value: 1,
-                          groupValue: gvalue,
-                          onChanged: (value) {
-                            setState(() {
-                              gvalue = value as int;
-                            });
-                          }),
+                        value: 1,
+                        groupValue: gvalue,
+                        onChanged: (value) {
+                          setState(() {
+                            gvalue = value as int;
+                          });
+                        },
+                      ),
                       const SizedBox(
                         width: 10,
                       ),
@@ -140,15 +138,16 @@ class _OrderNowState extends State<OrderNow> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Radio(
-                          value: 2,
-                          groupValue: gvalue,
-                          onChanged: (value) {
-                            setState(() {
-                              gvalue = value as int;
-                            });
-                          }),
+                        value: 2,
+                        groupValue: gvalue,
+                        onChanged: (value) {
+                          setState(() {
+                            gvalue = value as int;
+                          });
+                        },
+                      ),
                       const Text(
-                          '   Instant Shipping (Pak-Only)\n   (Duration:1 Days)'),
+                          '   Instant Shipping (Pak-Only)\n   (Duration:1 Day)'),
                     ],
                   ),
                   const SizedBox(
@@ -158,13 +157,14 @@ class _OrderNowState extends State<OrderNow> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Radio(
-                          value: 3,
-                          groupValue: gvalue,
-                          onChanged: (value) {
-                            setState(() {
-                              gvalue = value as int;
-                            });
-                          }),
+                        value: 3,
+                        groupValue: gvalue,
+                        onChanged: (value) {
+                          setState(() {
+                            gvalue = value as int;
+                          });
+                        },
+                      ),
                       const SizedBox(
                         width: 10,
                       ),
@@ -174,7 +174,7 @@ class _OrderNowState extends State<OrderNow> {
                   ),
                   const SizedBox(
                     height: 15,
-                  )
+                  ),
                 ],
               ),
             ),
@@ -203,10 +203,12 @@ class _OrderNowState extends State<OrderNow> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
                       child: ListTile(
-                        leading: Image.asset(widget.cartDetail[index].image),
-                        title: Text(widget.cartDetail[index].name),
-                        subtitle: Text(
-                            "Rs " + widget.cartDetail[index].price.toString()),
+                        leading: Image.asset(widget.cartDetail[index].image!),
+                        title: Text(widget.cartDetail[index].name!),
+                        subtitle: Text("Rs " +
+                            widget.cartDetail[index].price.toString() +
+                            " x " +
+                            widget.cartDetail[index].quantity.toString()),
                       ),
                     ),
                   );
@@ -235,7 +237,6 @@ class _OrderNowState extends State<OrderNow> {
                         ],
                       ),
                     ),
-
                     Expanded(
                       child: ListTile(
                         title: const Text("Item Count"),
@@ -254,12 +255,6 @@ class _OrderNowState extends State<OrderNow> {
                         subtitle: Text("Rs 100"),
                       ),
                     ),
-                    // Expanded(
-                    //   child: ListTile(
-                    //     title: Text("Shipping Fee"),
-                    //     subtitle: Text("Rs 200" + shippingPrice().toString()),
-                    //   ),
-                    // ),
                     Expanded(
                       child: ListTile(
                         title: const Text("Total Price"),
@@ -276,26 +271,27 @@ class _OrderNowState extends State<OrderNow> {
     );
   }
 
-  allPrice() {
-    int? num = 100;
-    for (int i = 0; i < widget.cartDetail.length; i++) {
-      num = num! + widget.cartDetail[i].price as int;
+  int allPrice() {
+    int total = 100; // Fixed tax
+    for (var item in widget.cartDetail) {
+      total += item.price! * item.quantity;
     }
-    return num;
+    return total;
   }
 
-  allItem() {
-    int num = 0;
-    for (int i = 0; i < widget.cartDetail.length; i++) {
-      num += widget.cartDetail[i].price as int;
+  int allItem() {
+    int total = 0;
+    for (var item in widget.cartDetail) {
+      total += item.price! * item.quantity;
     }
-    return num;
+    return total;
   }
 
-  allItemCount() {
-    int val1 = 0;
-    int val2 = widget.cartDetail.length;
-    int sum = val1 + val2;
-    return sum;
+  int allItemCount() {
+    int totalCount = 0;
+    for (var item in widget.cartDetail) {
+      totalCount += item.quantity;
+    }
+    return totalCount;
   }
 }

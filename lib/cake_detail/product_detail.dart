@@ -20,7 +20,14 @@ class _ProductDetailState extends State<ProductDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cake Craft'),
+        backgroundColor: Colors.blue,
+        title: const Text(
+          'Ainur Cake',
+          style: TextStyle(color: Colors.white),
+        ),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
       ),
       body: Stack(
         children: [

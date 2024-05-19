@@ -52,7 +52,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cake Craft'),
+        title: Text('Ainur Cake'),
       ),
       body: Form(
         key: _formKey,

@@ -43,7 +43,7 @@ class _SignupState extends State<Signup> {
       decoration: const InputDecoration(
         labelText: 'Username',
         prefixIcon: Icon(Icons.person),
-        hintText: 'Cake Craft',
+        hintText: 'Ainur Cake',
         border: UnderlineInputBorder(),
       ),
     );

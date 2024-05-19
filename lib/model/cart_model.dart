@@ -1,26 +1,28 @@
-class CartModel{
+class CartModel {
   String? image;
   String? name;
   int? price;
+  int quantity; // New attribute
 
-  CartModel({this.image,this.name,this.price});
+  CartModel({this.image, this.name, this.price, this.quantity = 1});
 
+  static List<CartModel> cart() => [];
 
-  static List<CartModel> cart()=>[];
-
-  factory CartModel.fromJson(Map<String,dynamic>json){
+  factory CartModel.fromJson(Map<String, dynamic> json) {
     return CartModel(
       image: json['image'],
       name: json['name'],
-      price: json['price']
+      price: json['price'],
+      quantity: json['quantity'] ?? 1,
     );
   }
 
-  Map<String,dynamic>toJson(){
-    final Map<String,dynamic> tojson=Map<String,dynamic>();
-    tojson['image']=this.image;
-    tojson['name']=this.name;
-    tojson['price']=this.price;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> tojson = Map<String, dynamic>();
+    tojson['image'] = this.image;
+    tojson['name'] = this.name;
+    tojson['price'] = this.price;
+    tojson['quantity'] = this.quantity;
     return tojson;
   }
 }

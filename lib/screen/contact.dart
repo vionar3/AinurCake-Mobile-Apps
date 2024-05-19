@@ -14,7 +14,7 @@ class _ContactUsState extends State<ContactUs> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cake Craft'),
+        title: const Text('Ainur Cake'),
       ),
       body: ListView(
         children: [
