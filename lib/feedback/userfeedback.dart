@@ -20,7 +20,7 @@ class _UserFeedbackState extends State<UserFeedback> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: const Text('Cake Craft'),
+        title: const Text('Ainur Cake'),
       ),
       body: Center(
         child: Container(
@@ -49,7 +49,7 @@ class _UserFeedbackState extends State<UserFeedback> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                const Text('If you have problem regarding cake craft',
+                const Text('If you have problem regarding Ainur Cake',
                     style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,

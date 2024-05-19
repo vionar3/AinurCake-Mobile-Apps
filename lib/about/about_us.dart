@@ -13,7 +13,7 @@ class _AboutUsState extends State<AboutUs> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cake Craft'),
+        title: const Text('Ainur Cake'),
         centerTitle: true,
       ),
       body: ListView(

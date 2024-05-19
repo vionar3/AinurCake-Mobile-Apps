@@ -94,7 +94,13 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blue,
-          title: const Text('Cake Craft'),
+          title: const Text(
+            'Ainur Cake',
+            style: TextStyle(color: Colors.white),
+          ),
+          iconTheme: const IconThemeData(
+            color: Colors.white,
+          ),
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(45),
             child: SizedBox(

@@ -243,7 +243,13 @@ class _CakeScreenState extends State<CakeScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: const Text('Cake Craft'),
+        title: const Text(
+          'Ainur Cake',
+          style: TextStyle(color: Colors.white),
+        ),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
         leading: InkWell(
           child: const Icon(Icons.arrow_back),
           onTap: () {

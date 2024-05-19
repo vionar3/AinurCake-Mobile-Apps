@@ -53,6 +53,9 @@ class _forgotPasswordState extends State<forgotPassword> {
           'Reset Password',
           style: TextStyle(color: Colors.white),
         ),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
       ),
       body: Column(
         children: [
