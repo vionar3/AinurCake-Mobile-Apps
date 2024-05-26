@@ -177,7 +177,7 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     const Padding(
                       padding: EdgeInsets.only(left: 10),
-                      child: Text('Available Now'),
+                      child: Text('Categories cakes'),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 5),

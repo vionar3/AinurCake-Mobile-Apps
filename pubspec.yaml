@@ -29,10 +29,11 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   animated_splash_screen: ^1.1.0
+  badges: ^3.1.2
   carousel_slider: ^4.0.0
   cloud_firestore: ^4.17.3
   cupertino_icons: ^1.0.6
-  email_validator: ^2.0.1
+  email_validator: ^2.1.17
   file_picker: ^8.0.3
   firebase_auth: ^4.19.5
   firebase_core: ^2.31.0
@@ -51,12 +52,6 @@ dependencies:
   url_launcher: ^6.0.12
 
 dev_dependencies:
-
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
   flutter_lints: ^3.0.0
   flutter_test:
     sdk: flutter

@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:ainurcake/model/user_model.dart';
 import 'package:ainurcake/screen/signin.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,6 +21,7 @@ class _SignupState extends State<Signup> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController addresController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
   bool cnpasswordVisibility = true;
   bool passwordVisibility = true;
   final _formkey = GlobalKey<FormState>();
@@ -152,6 +155,29 @@ class _SignupState extends State<Signup> {
               },
               icon: const Icon(Icons.remove_red_eye))),
     );
+    final phoneField = TextFormField(
+      controller: phoneController,
+      autofocus: false,
+      keyboardType: TextInputType.phone,
+      textInputAction: TextInputAction.next,
+      onSaved: (value) {
+        phoneController.text = value!;
+      },
+      validator: (value) {
+        if (value!.isEmpty) {
+          return 'Phone number cannot be empty';
+        } else if (!RegExp(r'^\+?1?\d{9,15}$').hasMatch(value)) {
+          return 'Enter a valid phone number';
+        } else {
+          return null;
+        }
+      },
+      decoration: const InputDecoration(
+        labelText: 'Phone Number',
+        prefixIcon: Icon(Icons.phone),
+        border: UnderlineInputBorder(),
+      ),
+    );
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -234,6 +260,10 @@ class _SignupState extends State<Signup> {
                       padding: const EdgeInsets.only(left: 33, right: 33),
                       child: confirmPasswordField,
                     ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 33, right: 33),
+                      child: phoneField,
+                    ),
                     const SizedBox(
                       height: 20,
                     ),
@@ -249,8 +279,16 @@ class _SignupState extends State<Signup> {
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10)))),
                         onPressed: () {
-                          print("daftar");
+                          // print("daftar");
                           // signup(emailController.text, passwordController.text);
+                          signup(
+                              nameController.text,
+                              emailController.text,
+                              passwordController.text,
+                              addresController.text,
+                              phoneController.text);
+
+                          print("terdaftar");
                         },
                         child: const Text(
                           'Sign up',
@@ -301,6 +339,8 @@ class _SignupState extends State<Signup> {
                           Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
                                   builder: (context) => const Signin()));
+                          // signup(nameController.text, emailController.text,
+                          //     passwordController.text, addresController.text);
                         },
                         child: const Text(
                           'Log in',
@@ -359,4 +399,55 @@ class _SignupState extends State<Signup> {
   //     backgroundColor: Colors.blue,
   //   ));
   // }
+  void signup(String username, String email, String password, String address,
+      String phone) async {
+    if (_formkey.currentState!.validate()) {
+      try {
+        var response = await http.post(
+          Uri.parse('http://192.168.100.46/api/register'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, String>{
+            'users_username': username,
+            'users_email': email,
+            'users_password': password,
+            'users_address': address,
+            'users_mobile': phone,
+          }),
+        );
+
+        if (response.statusCode == 201) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const Signin()),
+          );
+
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+              "Registered Successfully",
+              style: TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Colors.blue,
+          ));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+              "Failed to register: ${jsonDecode(response.body)['message']}",
+              style: const TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Colors.red,
+          ));
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            "Error: $e",
+            style: const TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.red,
+        ));
+      }
+    }
+  }
 }
