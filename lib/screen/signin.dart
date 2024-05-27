@@ -1,14 +1,12 @@
-// import 'package:cakecraft/admin_panel/admin_homepage.dart';
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:email_validator/email_validator.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ainurcake/screen/forgot_password.dart';
 import 'package:ainurcake/screen/homepage.dart';
 import 'package:ainurcake/screen/signup.dart';
-import 'package:ainurcake/screen/test.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:email_validator/email_validator.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:proste_bezier_curve/proste_bezier_curve.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Signin extends StatefulWidget {
   const Signin({Key? key}) : super(key: key);
@@ -19,7 +17,6 @@ class Signin extends StatefulWidget {
 
 class _SigninState extends State<Signin> {
   final _formkey = GlobalKey<FormState>();
-  // final _auth = FirebaseAuth.instance;
   bool passwordVisibility = true;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -174,7 +171,7 @@ class _SigninState extends State<Signin> {
                                 child: Checkbox(
                                     activeColor: Colors.blue.shade600,
                                     value: _isChecked,
-                                    onChanged: handleRemeberme)),
+                                    onChanged: handleRememberMe)),
                           ),
                         ),
                         const SizedBox(width: 3),
@@ -227,11 +224,8 @@ class _SigninState extends State<Signin> {
                                 RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10)))),
                         onPressed: () {
-                          //   signIn(emailController.text, passwordController.text);
-                          // print("login");
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (context) => const HomePage()));
+                          signIn(emailController.text, passwordController.text);
+                          print("masuk");
                         },
                         child: const Text(
                           'Log in',
@@ -271,7 +265,6 @@ class _SigninState extends State<Signin> {
                       width: 320,
                       child: TextButton(
                         style: ButtonStyle(
-                          //backgroundColor: MaterialStateProperty.all(Colors.transparent),
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
@@ -304,40 +297,56 @@ class _SigninState extends State<Signin> {
     );
   }
 
-  Future<String> checkBothUserBasesForTheUser(String uid) async {
-    DocumentSnapshot _userDoc =
-        await FirebaseFirestore.instance.collection('users').doc(uid).get();
-    if (_userDoc.exists) return 'users';
-    DocumentSnapshot _agencyDoc =
-        await FirebaseFirestore.instance.collection('agencies').doc(uid).get();
-    if (_agencyDoc.exists) {
-      return 'agencies';
-    } else {
-      return 'null';
+  void signIn(String email, String password) async {
+    if (_formkey.currentState!.validate()) {
+      var url = Uri.parse('http://192.168.100.46/api/login');
+      var response = await http.post(
+        url,
+        body: {'users_email': email, 'users_password': password},
+        headers: {'Accept': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        var token = jsonResponse['token'];
+        _saveUserToken(token);
+
+        // Navigate to HomePage
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const HomePage(),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              "Invalid Email/Password",
+              style: TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
   // void signIn(String email, String password) async {
   //   if (_formkey.currentState!.validate()) {
-  //     await _auth
-  //         .signInWithEmailAndPassword(email: email, password: password)
-  //         .then((_userDoc) {
-  //       checkBothUserBasesForTheUser(_userDoc.user!.uid).then((result) => {
-  //             print(result),
-  //             if (result == "users")
-  //               {
-  //                 print("user loggined"),
-  //                 // Navigator.of(context).pushReplacement(
-  //                 //     MaterialPageRoute(builder: (context) => const HomePage()))
-  //               }
-  //             else
-  //               {
-  //                 print("admin loggined"),
-  //                 // Navigator.of(context).pushReplacement(MaterialPageRoute(
-  //                 //     builder: (context) => const AdminHomePage()))
-  //               }
-  //           });
-  //     }).catchError((e) {
+  //     var url = Uri.parse(
+  //         'http://192.168.100.46/api/login'); // Ganti dengan URL API Laravel Anda
+  //     var response = await http.post(url,
+  //         body: {'users_email': email, 'users_password': password},
+  //         headers: {'Accept': 'application/json'});
+
+  //     if (response.statusCode == 200) {
+  //       var jsonResponse = jsonDecode(response.body);
+  //       var token = jsonResponse['token'];
+  //       _saveUserToken(token);
+
+  //       Navigator.of(context).pushReplacement(
+  //           MaterialPageRoute(builder: (context) => const HomePage()));
+  //     } else {
   //       ScaffoldMessenger.of(context).showSnackBar(
   //         const SnackBar(
   //           content: Text(
@@ -347,11 +356,16 @@ class _SigninState extends State<Signin> {
   //           backgroundColor: Colors.red,
   //         ),
   //       );
-  //     });
+  //     }
   //   }
   // }
 
-  void handleRemeberme(bool? value) {
+  void _saveUserToken(String token) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('user_token', token);
+  }
+
+  void handleRememberMe(bool? value) {
     _isChecked = value!;
     SharedPreferences.getInstance().then(
       (prefs) {
@@ -370,11 +384,8 @@ class _SigninState extends State<Signin> {
       SharedPreferences _prefs = await SharedPreferences.getInstance();
       var _email = _prefs.getString("email") ?? "";
       var _password = _prefs.getString("password") ?? "";
-      var _remeberMe = _prefs.getBool("remember_me") ?? false;
-      print(_remeberMe);
-      print(_email);
-      print(_password);
-      if (_remeberMe) {
+      var _rememberMe = _prefs.getBool("remember_me") ?? false;
+      if (_rememberMe) {
         setState(() {
           _isChecked = true;
         });

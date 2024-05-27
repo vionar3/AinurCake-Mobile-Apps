@@ -15,6 +15,10 @@ class OrderNow extends StatefulWidget {
 class _OrderNowState extends State<OrderNow> {
   int gvalue = 1;
   UserModel loggedInUser = UserModel();
+  DateTime? _pickupDate;
+  TimeOfDay? _pickupTime;
+  DateTime? _deliveryDate;
+  TimeOfDay? _deliveryTime;
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +109,7 @@ class _OrderNowState extends State<OrderNow> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          'Choose Shipping Method',
+                          'Memilih layanan pesanan',
                           style: TextStyle(
                               color: Colors.blue.shade600, fontSize: 25),
                         ),
@@ -128,9 +132,73 @@ class _OrderNowState extends State<OrderNow> {
                         width: 10,
                       ),
                       const Text(
-                          'Standard Shipping (Pak-Only)\n(Duration:3-5 Business Days)'),
+                          'Pesanan pengiriman\n(Lokasi terbatas sekitaran kota)'),
                     ],
                   ),
+                  gvalue == 1
+                      ? Column(
+                          children: [
+                            // Padding(
+                            //   padding: const EdgeInsets.all(8.0),
+                            //   child: Row(
+                            //     mainAxisAlignment: MainAxisAlignment.start,
+                            //     children: [
+                            //       Text(
+                            //         'Jadwal Pengiriman',
+                            //         style: TextStyle(
+                            //             color: Colors.blue.shade600,
+                            //             fontSize: 20),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      final date = await showDatePicker(
+                                        context: context,
+                                        initialDate: DateTime.now(),
+                                        firstDate: DateTime.now(),
+                                        lastDate: DateTime(2030),
+                                      );
+                                      if (date != null) {
+                                        setState(() {
+                                          _deliveryDate = date;
+                                        });
+                                      }
+                                    },
+                                    child: Text(_deliveryDate == null
+                                        ? 'Pilih Tanggal'
+                                        : _deliveryDate!.toString()),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      final time = await showTimePicker(
+                                        context: context,
+                                        initialTime: TimeOfDay.now(),
+                                      );
+                                      if (time != null) {
+                                        setState(() {
+                                          _deliveryTime = time;
+                                        });
+                                      }
+                                    },
+                                    child: Text(_deliveryTime == null
+                                        ? 'Pilih Waktu'
+                                        : _deliveryTime!.format(context)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        )
+                      : const SizedBox(),
                   const SizedBox(
                     height: 20,
                   ),
@@ -146,31 +214,75 @@ class _OrderNowState extends State<OrderNow> {
                           });
                         },
                       ),
-                      const Text(
-                          '   Instant Shipping (Pak-Only)\n   (Duration:1 Day)'),
+                      const Text('   Pesanan jemputan\n   (lorem ipsum)'),
                     ],
                   ),
+                  gvalue == 2
+                      ? Column(
+                          children: [
+                            // Padding(
+                            //   padding: const EdgeInsets.all(8.0),
+                            //   child: Row(
+                            //     mainAxisAlignment: MainAxisAlignment.start,
+                            //     children: [
+                            //       Text(
+                            //         'Jadwal Penjemputan',
+                            //         style: TextStyle(
+                            //             color: Colors.blue.shade600,
+                            //             fontSize: 20),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      final date = await showDatePicker(
+                                        context: context,
+                                        initialDate: DateTime.now(),
+                                        firstDate: DateTime.now(),
+                                        lastDate: DateTime(2030),
+                                      );
+                                      if (date != null) {
+                                        setState(() {
+                                          _pickupDate = date;
+                                        });
+                                      }
+                                    },
+                                    child: Text(_pickupDate == null
+                                        ? 'Pilih Tanggal'
+                                        : _pickupDate!.toString()),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      final time = await showTimePicker(
+                                        context: context,
+                                        initialTime: TimeOfDay.now(),
+                                      );
+                                      if (time != null) {
+                                        setState(() {
+                                          _pickupTime = time;
+                                        });
+                                      }
+                                    },
+                                    child: Text(_pickupTime == null
+                                        ? 'Pilih Waktu'
+                                        : _pickupTime!.format(context)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        )
+                      : const SizedBox(),
                   const SizedBox(
                     height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Radio(
-                        value: 3,
-                        groupValue: gvalue,
-                        onChanged: (value) {
-                          setState(() {
-                            gvalue = value as int;
-                          });
-                        },
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      const Text(
-                          'Fast Shipping (Pak-Only)\n(Duration:2-3 Business Days)'),
-                    ],
                   ),
                   const SizedBox(
                     height: 15,
