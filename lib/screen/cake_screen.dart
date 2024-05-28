@@ -3,7 +3,9 @@ import 'package:ainurcake/cake_detail/product_detail.dart';
 import 'package:ainurcake/helper_widget/custom_card_cake.dart';
 import 'package:ainurcake/model/cake_model.dart';
 import 'package:ainurcake/model/cart_model.dart';
+import 'package:ainurcake/cart/cart_page.dart';
 import 'package:flutter/material.dart';
+import 'package:badges/badges.dart' as badges;
 
 class CakeScreen extends StatefulWidget {
   final String temp;
@@ -15,6 +17,7 @@ class CakeScreen extends StatefulWidget {
 
 class _CakeScreenState extends State<CakeScreen> {
   List<CakeModel> mylist = [];
+  // List<CartModel> cartdetail = [];
   final List<CartModel> cart = CartModel.cart();
   List<CakeModel> All = [
     CakeModel(
@@ -256,6 +259,20 @@ class _CakeScreenState extends State<CakeScreen> {
             Navigator.of(context).pop(cart.length);
           },
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: InkWell(
+              child: const Icon(Icons.shopping_cart_rounded),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => Carts(cartDetail: cart)),
+                );
+              },
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Stack(

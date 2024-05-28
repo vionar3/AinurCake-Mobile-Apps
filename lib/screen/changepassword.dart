@@ -1,8 +1,9 @@
-import 'package:ainurcake/model/user_model.dart';
-// import 'package:cakecraft/screen/checkloginregister.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({Key? key}) : super(key: key);
@@ -14,45 +15,107 @@ class ChangePassword extends StatefulWidget {
 class _ChangePasswordState extends State<ChangePassword> {
   // User? user = FirebaseAuth.instance.currentUser;
   // UserModel loggedInUser = UserModel();
+
   @override
   // void initState() {
   //   super.initState();
-  //   FirebaseFirestore.instance.collection("users").doc(user!.uid).get().then((
-  //       value) {
+  //   FirebaseFirestore.instance.collection("users").doc(user!.uid).get().then((value) {
   //     loggedInUser = UserModel.fromMap(value.data());
   //     setState(() {});
   //   });
   // }
 
   final _formKey = GlobalKey<FormState>();
-  bool visibility = false;
+  bool visibilityOld = false;
+  bool visibilityNew = false;
 
-  var newpass = "";
+  var oldPass = "";
+  var newPass = "";
+
+  final oldPasswordEditingController = TextEditingController();
   final newPasswordEditingController = TextEditingController();
+  final confirmPasswordEditingController = TextEditingController();
 
   @override
   void dispose() {
+    oldPasswordEditingController.dispose();
     newPasswordEditingController.dispose();
+    confirmPasswordEditingController.dispose();
     super.dispose();
   }
 
-  // final currentUser=FirebaseAuth.instance.currentUser;
-  // changePassword() async{
-  //   try{
-  //     await currentUser!.updatePassword(newpass);
+  Future<void> changePassword() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('user_token');
+
+    var url = Uri.parse('http://192.168.100.46/api/change-password');
+    var response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
+      },
+      body: {
+        'old_password': oldPasswordEditingController.text,
+        'new_password': newPasswordEditingController.text,
+        'new_password_confirmation': confirmPasswordEditingController.text,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          "Password changed successfully",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.green,
+      ));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          "Failed to change password",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.red,
+      ));
+    }
+  }
+
+  // final currentUser = FirebaseAuth.instance.currentUser;
+  // changePassword() async {
+  //   try {
+  //     await currentUser!.updatePassword(newPass);
   //     FirebaseAuth.instance.signOut();
-  //     Navigator.pushAndRemoveUntil(context, PageRouteBuilder(pageBuilder: (context, a,b) => const Check(),
-  //         transitionDuration:const Duration(seconds: 0)), (route) => false);
-  //     ScaffoldMessenger.of(context).showSnackBar( const SnackBar( content: Text("Your Password has been changed. Login Again !",style: TextStyle(color: Colors.white),),backgroundColor: Colors.blue, ) );
-  //   }catch(e){
-  //     ScaffoldMessenger.of(context).showSnackBar( const SnackBar( content: Text("Your Password has not changed",style: TextStyle(color: Colors.white),),backgroundColor: Colors.blue, ) );
+  //     Navigator.pushAndRemoveUntil(
+  //       context,
+  //       PageRouteBuilder(
+  //           pageBuilder: (context, a, b) => const Check(),
+  //           transitionDuration: const Duration(seconds: 0)),
+  //       (route) => false,
+  //     );
+  //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+  //       content: Text(
+  //         "Your Password has been changed. Login Again !",
+  //         style: TextStyle(color: Colors.white),
+  //       ),
+  //       backgroundColor: Colors.blue,
+  //     ));
+  //   } catch (e) {
+  //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+  //       content: Text(
+  //         "Your Password has not changed",
+  //         style: TextStyle(color: Colors.white),
+  //       ),
+  //       backgroundColor: Colors.blue,
+  //     ));
   //   }
   // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ainur Cake'),
+        title: const Text('Ainur Cake'),
       ),
       body: Form(
         key: _formKey,
@@ -74,7 +137,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     height: 180,
                   ),
                   const Text(
-                    'Pakistan No 1 Bakkery',
+                    'Pakistan No 1 Bakery',
                     style: TextStyle(color: Colors.white, fontSize: 20),
                   )
                 ],
@@ -82,37 +145,97 @@ class _ChangePasswordState extends State<ChangePassword> {
             ),
             ListView(
               children: [
+                SizedBox(height: 40),
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 310),
-                    child: TextFormField(
-                      obscureText: visibility,
-                      decoration: InputDecoration(
-                          labelText: 'Change Password',
-                          hintText: 'Enter New Password',
-                          labelStyle: const TextStyle(fontSize: 20),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          errorStyle:
-                              const TextStyle(color: Colors.red, fontSize: 15),
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                visibility = !visibility;
-                              });
-                            },
-                            icon: const Icon(Icons.remove_red_eye),
-                          )),
-                      controller: newPasswordEditingController,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please Enter Email';
-                        } else if (value == '@') {
-                          return 'Enter Valid Email';
-                        }
-                        return null;
-                      },
+                    padding: const EdgeInsets.only(top: 250),
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          obscureText: visibilityOld,
+                          decoration: InputDecoration(
+                            labelText: 'Old Password',
+                            hintText: 'Enter Old Password',
+                            labelStyle: const TextStyle(fontSize: 20),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            errorStyle: const TextStyle(
+                                color: Colors.red, fontSize: 15),
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  visibilityOld = !visibilityOld;
+                                });
+                              },
+                              icon: const Icon(Icons.remove_red_eye),
+                            ),
+                          ),
+                          controller: oldPasswordEditingController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please Enter Old Password';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 20),
+                        TextFormField(
+                          obscureText: visibilityNew,
+                          decoration: InputDecoration(
+                            labelText: 'New Password',
+                            hintText: 'Enter New Password',
+                            labelStyle: const TextStyle(fontSize: 20),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            errorStyle: const TextStyle(
+                                color: Colors.red, fontSize: 15),
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  visibilityNew = !visibilityNew;
+                                });
+                              },
+                              icon: const Icon(Icons.remove_red_eye),
+                            ),
+                          ),
+                          controller: newPasswordEditingController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please Enter New Password';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 20),
+                        TextFormField(
+                          obscureText: visibilityOld,
+                          decoration: InputDecoration(
+                            labelText: 'Confirmation Password',
+                            hintText: 'Enter confirmation Password',
+                            labelStyle: const TextStyle(fontSize: 20),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            errorStyle: const TextStyle(
+                                color: Colors.red, fontSize: 15),
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  visibilityOld = !visibilityOld;
+                                });
+                              },
+                              icon: const Icon(Icons.remove_red_eye),
+                            ),
+                          ),
+                          controller: confirmPasswordEditingController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please Enter Old Password';
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -128,17 +251,14 @@ class _ChangePasswordState extends State<ChangePassword> {
                         backgroundColor: MaterialStateProperty.all(Colors.blue),
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10))),
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
                       ),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          setState(() {
-                            newpass = newPasswordEditingController.text;
-                          });
+                          changePassword();
                         }
-                        print("password di ubah");
-                        // changePassword();
                       },
                       child: const Text(
                         'Change Password',

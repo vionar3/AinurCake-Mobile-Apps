@@ -1,30 +1,31 @@
-class UserModel{
-  String? uid;
+class UserModel {
+  int? uid;
   String? username;
   String? email;
   String? address;
-  String? usertype;
+  String? phone;
 
+  UserModel({this.uid, this.username, this.email, this.address, this.phone});
 
-  UserModel({this.uid,this.username,this.email,this.address,this.usertype});
-
-  factory UserModel.fromMap(map){
+  // Named constructor to create an instance from a map
+  factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-        uid: map['uid'],
-        username: map['username'],
-        email: map['email'],
-        address: map['address'],
-        usertype: map['usertype']
+      uid: json['users_id'],
+      username: json['users_username'],
+      email: json['users_email'],
+      address: json['users_address'],
+      phone: json['users_mobile'],
     );
   }
 
-  Map<String, dynamic> toMap(){
+  // Method to convert an instance to a map
+  Map<String, dynamic> toJson() {
     return {
-      'uid': uid,
-      'username': username,
-      'email': email,
-      'address': address,
-      'usertype':usertype
+      'users_id': uid,
+      'users_username': username,
+      'users_email': email,
+      'users_address': address,
+      'users_mobile': phone,
     };
   }
 }
