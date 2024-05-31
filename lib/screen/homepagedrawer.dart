@@ -7,6 +7,7 @@ import 'package:ainurcake/screen/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:ainurcake/api/api_service.dart';
 
 class HomDrawer extends StatefulWidget {
   const HomDrawer({Key? key}) : super(key: key);
@@ -65,8 +66,9 @@ class _HomDrawerState extends State<HomDrawer> {
   Future<void> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('user_token');
+    var apiService = ApiService();
     if (token != null) {
-      var url = Uri.parse('http://192.168.100.46/api/logout');
+      var url = Uri.parse('${apiService.baseUrl}/logout');
       try {
         var response = await http.post(
           url,
@@ -99,7 +101,7 @@ class _HomDrawerState extends State<HomDrawer> {
               child: Column(
                 children: [
                   SizedBox(
-                    child: Image.asset('images/cclogo.png'),
+                    child: Image.asset('images/logo22.png'),
                     height: 100,
                   ),
                   const Text(

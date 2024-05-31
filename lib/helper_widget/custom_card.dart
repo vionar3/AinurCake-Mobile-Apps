@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class CustomCard extends StatefulWidget {
-  final String? cpic;
+  // final String? cpic;
   final String? cname;
   final Function()? onTap;
 
-  CustomCard({this.cpic, this.cname, this.onTap});
+  CustomCard({this.cname, this.onTap});
 
   @override
   State<CustomCard> createState() => _CustomCardState();
@@ -36,13 +36,13 @@ class _CustomCardState extends State<CustomCard> {
               Container(
                 height: 120,
                 width: 120,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.0),
-                  image: DecorationImage(
-                    image: AssetImage(widget.cpic!),
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                // decoration: BoxDecoration(
+                //   borderRadius: BorderRadius.circular(20.0),
+                //   image: DecorationImage(
+                //     image: AssetImage(widget.cpic!),
+                //     fit: BoxFit.cover,
+                //   ),
+                // ),
               ),
               SizedBox(height: 12.0),
               Padding(

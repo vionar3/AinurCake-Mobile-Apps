@@ -7,6 +7,7 @@ import 'package:ainurcake/screen/forgot_password.dart';
 import 'package:ainurcake/screen/homepage.dart';
 import 'package:ainurcake/screen/signup.dart';
 import 'package:proste_bezier_curve/proste_bezier_curve.dart';
+import 'package:ainurcake/api/api_service.dart'; // Import the ApiService class
 
 class Signin extends StatefulWidget {
   const Signin({Key? key}) : super(key: key);
@@ -225,7 +226,6 @@ class _SigninState extends State<Signin> {
                                     borderRadius: BorderRadius.circular(10)))),
                         onPressed: () {
                           signIn(emailController.text, passwordController.text);
-                          print("masuk");
                         },
                         child: const Text(
                           'Log in',
@@ -299,7 +299,8 @@ class _SigninState extends State<Signin> {
 
   void signIn(String email, String password) async {
     if (_formkey.currentState!.validate()) {
-      var url = Uri.parse('http://192.168.100.46/api/login');
+      var apiService = ApiService();
+      var url = Uri.parse('${apiService.baseUrl}/login');
       var response = await http.post(
         url,
         body: {'users_email': email, 'users_password': password},
@@ -310,6 +311,7 @@ class _SigninState extends State<Signin> {
         var jsonResponse = jsonDecode(response.body);
         var token = jsonResponse['token'];
         _saveUserToken(token);
+        print("masuk");
 
         // Navigate to HomePage
         Navigator.of(context).pushReplacement(
@@ -330,35 +332,6 @@ class _SigninState extends State<Signin> {
       }
     }
   }
-
-  // void signIn(String email, String password) async {
-  //   if (_formkey.currentState!.validate()) {
-  //     var url = Uri.parse(
-  //         'http://192.168.100.46/api/login'); // Ganti dengan URL API Laravel Anda
-  //     var response = await http.post(url,
-  //         body: {'users_email': email, 'users_password': password},
-  //         headers: {'Accept': 'application/json'});
-
-  //     if (response.statusCode == 200) {
-  //       var jsonResponse = jsonDecode(response.body);
-  //       var token = jsonResponse['token'];
-  //       _saveUserToken(token);
-
-  //       Navigator.of(context).pushReplacement(
-  //           MaterialPageRoute(builder: (context) => const HomePage()));
-  //     } else {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(
-  //           content: Text(
-  //             "Invalid Email/Password",
-  //             style: TextStyle(color: Colors.white),
-  //           ),
-  //           backgroundColor: Colors.red,
-  //         ),
-  //       );
-  //     }
-  //   }
-  // }
 
   void _saveUserToken(String token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

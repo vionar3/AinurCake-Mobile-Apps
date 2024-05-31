@@ -48,7 +48,7 @@ class _CartsState extends State<Carts> {
                 Expanded(
                   child: ListTile(
                     title: const Text("Total Price"),
-                    subtitle: Text("Rs " + allPrice().toString()),
+                    subtitle: Text("Rp " + allPrice().toString()),
                   ),
                 ),
               ],
@@ -84,12 +84,12 @@ class _CartsState extends State<Carts> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
               child: ListTile(
-                leading: Image.asset(widget.cartDetail[index].image!),
+                // leading: Image.asset(widget.cartDetail[index].image!),
                 title: Text(widget.cartDetail[index].name!),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Rs " + widget.cartDetail[index].price.toString()),
+                    Text("Rp " + widget.cartDetail[index].price.toString()),
                     Row(
                       children: [
                         IconButton(

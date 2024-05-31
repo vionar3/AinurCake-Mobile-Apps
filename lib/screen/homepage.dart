@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:ainurcake/button/animated_button.dart';
 import 'package:ainurcake/helper_widget/custom_card.dart';
 // import 'package:ainurcake/map/google_map.dart';
@@ -12,6 +14,8 @@ import 'package:ainurcake/slider/slidder.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ainurcake/screen/homepagedrawer.dart';
+import 'package:ainurcake/api/api_service.dart';
+import 'package:ainurcake/model/category_model.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -71,18 +75,41 @@ class _HomePageState extends State<HomePage> {
 
   TextEditingController searchController = TextEditingController();
   List<CartModel> cartdetail = [];
+  List<CategoryModel> categories = [];
 
-  List<ProductModel> prDetail2 = [
-    ProductModel(id: 1, images: 'images/avall.png', name: 'All'),
-    ProductModel(id: 2, images: 'images/sig.png', name: 'Signature Cakes'),
-    ProductModel(id: 3, images: 'images/ice.png', name: 'Ice Cream Cakes'),
-    ProductModel(
-        id: 4, images: 'images/all/all3.png', name: 'Fresh Cream Cakes'),
-    ProductModel(id: 5, images: 'images/teacake/cake3.png', name: 'Tea Cakes'),
-    ProductModel(id: 6, images: 'images/all/all14.png', name: 'Pastries'),
-    ProductModel(id: 7, images: 'images/all/all7.png', name: 'Designer Cakes'),
-    ProductModel(id: 8, images: 'images/almo.png', name: 'Dry Cake'),
-  ];
+  // List<ProductModel> prDetail2 = [
+  //   ProductModel(id: 1, images: 'images/avall.png', name: 'All'),
+  //   ProductModel(id: 2, images: 'images/sig.png', name: 'Signature Cakes'),
+  //   ProductModel(id: 3, images: 'images/ice.png', name: 'Ice Cream Cakes'),
+  //   ProductModel(
+  //       id: 4, images: 'images/all/all3.png', name: 'Fresh Cream Cakes'),
+  //   ProductModel(id: 5, images: 'images/teacake/cake3.png', name: 'Tea Cakes'),
+  //   ProductModel(id: 6, images: 'images/all/all14.png', name: 'Pastries'),
+  //   ProductModel(id: 7, images: 'images/all/all7.png', name: 'Designer Cakes'),
+  //   ProductModel(id: 8, images: 'images/almo.png', name: 'Dry Cake'),
+  // ];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCategories();
+  }
+
+  Future<void> fetchCategories() async {
+    // final String baseUrl = "http://192.168.100.50/api";
+    var apiService = ApiService();
+    final response =
+        await http.get(Uri.parse('${apiService.baseUrl}/categories'));
+    if (response.statusCode == 200) {
+      List jsonResponse = json.decode(response.body);
+      setState(() {
+        categories =
+            jsonResponse.map((data) => CategoryModel.fromJson(data)).toList();
+      });
+    } else {
+      throw Exception('Failed to load categories');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -195,30 +222,83 @@ class _HomePageState extends State<HomePage> {
                     )
                   ],
                 ),
+                // Row(
+                //   children: [
+                //     Expanded(
+                //       child: Container(
+                //         child: SizedBox(
+                //           height: 375,
+                //           child: FutureBuilder<List<ProductModel>>(
+                //             future:
+                //                 apiService.fetchProductsByCategory(categoryId),
+                //             builder: (BuildContext context,
+                //                 AsyncSnapshot<List<ProductModel>> snapshot) {
+                //               if (snapshot.connectionState ==
+                //                   ConnectionState.waiting) {
+                //                 return Center(
+                //                     child: CircularProgressIndicator());
+                //               } else if (snapshot.hasError) {
+                //                 return Center(
+                //                     child: Text('Error: ${snapshot.error}'));
+                //               } else {
+                //                 return GridView.builder(
+                //                   gridDelegate:
+                //                       const SliverGridDelegateWithFixedCrossAxisCount(
+                //                     crossAxisCount: 2,
+                //                     mainAxisExtent: 180,
+                //                   ),
+                //                   itemCount: snapshot.data!.length,
+                //                   scrollDirection: Axis.horizontal,
+                //                   shrinkWrap: true,
+                //                   itemBuilder:
+                //                       (BuildContext context, int index) {
+                //                     return CustomCard(
+                //                       cpic: snapshot.data![index].images,
+                //                       cname: snapshot.data![index].name,
+                //                       onTap: () {
+                //                         Navigator.of(context).push(
+                //                           MaterialPageRoute(
+                //                             builder: (context) => CakeScreen(
+                //                               temp: snapshot.data![index].name,
+                //                               cartDetail: cartdetail,
+                //                             ),
+                //                           ),
+                //                         );
+                //                       },
+                //                     );
+                //                   },
+                //                 );
+                //               }
+                //             },
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
+
                 Row(
                   children: [
                     Expanded(
                       child: Container(
-                        // color: Colors.blue,
                         child: SizedBox(
                           height: 375,
                           child: GridView.builder(
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 2, mainAxisExtent: 180),
-                            itemCount: prDetail2.length,
+                            itemCount: categories.length,
                             scrollDirection: Axis.horizontal,
                             shrinkWrap: true,
                             itemBuilder: (BuildContext context, int index) {
                               return CustomCard(
-                                cpic: prDetail2[index].images,
-                                cname: prDetail2[index].name,
+                                cname: categories[index].name,
                                 onTap: () {
-                                  getCake(prDetail2[index].name);
-                                  var temp = getCake(prDetail2[index].name);
+                                  int categoryId =
+                                      getCake(categories[index].name);
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => CakeScreen(
-                                            temp: '$temp',
+                                            categoryId: categoryId,
                                             cartDetail: cartdetail,
                                           )));
                                 },
@@ -230,6 +310,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
+
                 const SizedBox(
                   height: 20,
                 ),
@@ -273,26 +354,38 @@ class _HomePageState extends State<HomePage> {
   }
 
   getCake(String? cakeClick) {
-    var select = "";
-    if (cakeClick == 'All') {
-      select = "All";
-    } else if (cakeClick == 'Signature Cakes') {
-      select = "Signature Cakes";
-    } else if (cakeClick == 'Ice Cream Cakes') {
-      select = "Ice Cream Cakes";
-    } else if (cakeClick == 'Fresh Cream Cakes') {
-      select = "Fresh Cream Cakes";
-    } else if (cakeClick == 'Signature') {
-      select = "Signature";
-    } else if (cakeClick == 'Tea Cakes') {
-      select = 'Tea Cakes';
-    } else if (cakeClick == 'Pastries') {
-      select = "Pastries";
-    } else if (cakeClick == 'Designer Cakes') {
-      select = "Designer Cake";
-    } else {
-      select = "Dry Cake";
+    var select = 0;
+    if (cakeClick == 'Kue Basah') {
+      select = 1; // Misalnya 1 adalah ID untuk Kue Basah
+    } else if (cakeClick == 'Kue Kering') {
+      select = 2; // Misalnya 2 adalah ID untuk Kue Kering
+    } else if (cakeClick == 'Kue Tart') {
+      select = 3; // Misalnya 3 adalah ID untuk Kue Tart
     }
     return select;
   }
+
+  // getCake(String? cakeClick) {
+  //   var select = "";
+  //   if (cakeClick == 'All') {
+  //     select = "All";
+  //   } else if (cakeClick == 'Signature Cakes') {
+  //     select = "Signature Cakes";
+  //   } else if (cakeClick == 'Ice Cream Cakes') {
+  //     select = "Ice Cream Cakes";
+  //   } else if (cakeClick == 'Fresh Cream Cakes') {
+  //     select = "Fresh Cream Cakes";
+  //   } else if (cakeClick == 'Signature') {
+  //     select = "Signature";
+  //   } else if (cakeClick == 'Tea Cakes') {
+  //     select = 'Tea Cakes';
+  //   } else if (cakeClick == 'Pastries') {
+  //     select = "Pastries";
+  //   } else if (cakeClick == 'Designer Cakes') {
+  //     select = "Designer Cake";
+  //   } else {
+  //     select = "Dry Cake";
+  //   }
+  //   return select;
+  // }
 }
