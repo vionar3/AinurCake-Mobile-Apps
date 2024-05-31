@@ -10,9 +10,9 @@ class CartModel {
 
   factory CartModel.fromJson(Map<String, dynamic> json) {
     return CartModel(
-      image: json['image'],
-      name: json['name'],
-      price: json['price'],
+      image: json['product_image'],
+      name: json['product_name'],
+      price: json['prodct_price'],
       quantity: json['quantity'] ?? 1,
     );
   }

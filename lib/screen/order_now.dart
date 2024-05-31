@@ -315,7 +315,7 @@ class _OrderNowState extends State<OrderNow> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
                       child: ListTile(
-                        leading: Image.asset(widget.cartDetail[index].image!),
+                        // leading: Image.asset(widget.cartDetail[index].image!),
                         title: Text(widget.cartDetail[index].name!),
                         subtitle: Text("Rs " +
                             widget.cartDetail[index].price.toString() +

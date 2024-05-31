@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:proste_bezier_curve/proste_bezier_curve.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:ainurcake/api/api_service.dart';
 
 class Signup extends StatefulWidget {
   const Signup({Key? key}) : super(key: key);
@@ -26,6 +27,8 @@ class _SignupState extends State<Signup> {
   bool passwordVisibility = true;
   final _formkey = GlobalKey<FormState>();
   // final _auth = FirebaseAuth.instance;
+  final String baseUrl = ApiService().baseUrl;
+
   @override
   Widget build(BuildContext context) {
     final nameField = TextFormField(
@@ -50,6 +53,7 @@ class _SignupState extends State<Signup> {
         border: UnderlineInputBorder(),
       ),
     );
+
     final addressField = TextFormField(
       controller: addresController,
       autofocus: false,
@@ -103,24 +107,26 @@ class _SignupState extends State<Signup> {
         if (value!.isEmpty) {
           return 'Password Cannot be empty';
         } else if (value.length < 6) {
-          return 'Password must be 6 digit';
+          return 'Password must be 6 digits';
         } else if (passwordController.text != confirmPasswordController.text) {
-          return 'Password do not match';
+          return 'Password does not match';
         } else {
           return null;
         }
       },
       decoration: InputDecoration(
-          labelText: 'Password',
-          prefixIcon: const Icon(Icons.vpn_key_sharp),
-          border: const UnderlineInputBorder(),
-          suffixIcon: IconButton(
-              onPressed: () {
-                setState(() {
-                  passwordVisibility = !passwordVisibility;
-                });
-              },
-              icon: const Icon(Icons.remove_red_eye))),
+        labelText: 'Password',
+        prefixIcon: const Icon(Icons.vpn_key_sharp),
+        border: const UnderlineInputBorder(),
+        suffixIcon: IconButton(
+          onPressed: () {
+            setState(() {
+              passwordVisibility = !passwordVisibility;
+            });
+          },
+          icon: const Icon(Icons.remove_red_eye),
+        ),
+      ),
     );
 
     final confirmPasswordField = TextFormField(
@@ -136,25 +142,28 @@ class _SignupState extends State<Signup> {
         if (value!.isEmpty) {
           return 'Confirm Password Cannot be empty';
         } else if (value.length < 6) {
-          return 'Password must be 6 digit';
+          return 'Password must be 6 digits';
         } else if (passwordController.text != confirmPasswordController.text) {
-          return 'Password do not match';
+          return 'Password does not match';
         } else {
           return null;
         }
       },
       decoration: InputDecoration(
-          labelText: 'Confirm Password',
-          prefixIcon: const Icon(Icons.vpn_key_sharp),
-          border: const UnderlineInputBorder(),
-          suffixIcon: IconButton(
-              onPressed: () {
-                setState(() {
-                  cnpasswordVisibility = !cnpasswordVisibility;
-                });
-              },
-              icon: const Icon(Icons.remove_red_eye))),
+        labelText: 'Confirm Password',
+        prefixIcon: const Icon(Icons.vpn_key_sharp),
+        border: const UnderlineInputBorder(),
+        suffixIcon: IconButton(
+          onPressed: () {
+            setState(() {
+              cnpasswordVisibility = !cnpasswordVisibility;
+            });
+          },
+          icon: const Icon(Icons.remove_red_eye),
+        ),
+      ),
     );
+
     final phoneField = TextFormField(
       controller: phoneController,
       autofocus: false,
@@ -200,30 +209,34 @@ class _SignupState extends State<Signup> {
                 child: Container(
                   height: 500,
                   decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage('images/splash.png'),
-                          fit: BoxFit.cover)),
+                    image: DecorationImage(
+                      image: AssetImage('images/splash.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 35, left: 10),
                 child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Icon(
-                      Icons.arrow_back_ios_rounded,
-                      color: Colors.white,
-                    )),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Icon(
+                    Icons.arrow_back_ios_rounded,
+                    color: Colors.white,
+                  ),
+                ),
               ),
               const Padding(
                 padding: EdgeInsets.only(top: 150, left: 20),
                 child: Text(
                   'Create',
                   style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
               const Padding(
@@ -231,9 +244,10 @@ class _SignupState extends State<Signup> {
                 child: Text(
                   'Account',
                   style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
               Padding(
@@ -272,28 +286,30 @@ class _SignupState extends State<Signup> {
                       width: 320,
                       child: TextButton(
                         style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.blue),
-                            shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)))),
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.blue),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
                         onPressed: () {
-                          // print("daftar");
-                          // signup(emailController.text, passwordController.text);
                           signup(
-                              nameController.text,
-                              emailController.text,
-                              passwordController.text,
-                              addresController.text,
-                              phoneController.text);
-
-                          print("terdaftar");
+                            nameController.text,
+                            emailController.text,
+                            passwordController.text,
+                            addresController.text,
+                            phoneController.text,
+                          );
                         },
                         child: const Text(
                           'Sign up',
                           style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -303,21 +319,23 @@ class _SignupState extends State<Signup> {
                     Row(
                       children: const [
                         Expanded(
-                            child: Divider(
-                          thickness: 1,
-                          indent: 38,
-                          endIndent: 3,
-                        )),
+                          child: Divider(
+                            thickness: 1,
+                            indent: 38,
+                            endIndent: 3,
+                          ),
+                        ),
                         Text(
                           "or",
                           style: TextStyle(color: Colors.grey),
                         ),
                         Expanded(
-                            child: Divider(
-                          thickness: 1,
-                          indent: 3,
-                          endIndent: 38,
-                        ))
+                          child: Divider(
+                            thickness: 1,
+                            indent: 3,
+                            endIndent: 38,
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(
@@ -331,21 +349,24 @@ class _SignupState extends State<Signup> {
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                side: const BorderSide(color: Colors.grey)),
+                              borderRadius: BorderRadius.circular(10),
+                              side: const BorderSide(color: Colors.grey),
+                            ),
                           ),
                         ),
                         onPressed: () {
                           Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (context) => const Signin()));
-                          // signup(nameController.text, emailController.text,
-                          //     passwordController.text, addresController.text);
+                            MaterialPageRoute(
+                              builder: (context) => const Signin(),
+                            ),
+                          );
                         },
                         child: const Text(
                           'Log in',
                           style: TextStyle(
-                              color: Colors.grey, fontWeight: FontWeight.w500),
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                     ),
@@ -354,7 +375,7 @@ class _SignupState extends State<Signup> {
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -362,49 +383,12 @@ class _SignupState extends State<Signup> {
     );
   }
 
-  // void signup(String email, String password) async {
-  //   if (_formkey.currentState!.validate()) {
-  //     await _auth
-  //         .createUserWithEmailAndPassword(email: email, password: password)
-  //         .then((value) => {postDetailsToFirestore()});
-  //   }
-  // }
-
-  // postDetailsToFirestore() async {
-  //   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-  //   User? user = _auth.currentUser;
-
-  //   UserModel userModel = UserModel();
-
-  //   userModel.usertype = "users";
-  //   userModel.username = nameController.text;
-  //   userModel.email = user!.email;
-  //   userModel.uid = user.uid;
-  //   userModel.address = addresController.text;
-
-  //   await firebaseFirestore
-  //       .collection("users")
-  //       .doc(user.uid)
-  //       .set(userModel.toMap());
-  //   Navigator.pushReplacement(
-  //     context,
-  //     MaterialPageRoute(builder: (context) => const Signin()),
-  //   );
-
-  //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-  //     content: Text(
-  //       "Registered Successfully",
-  //       style: TextStyle(color: Colors.white),
-  //     ),
-  //     backgroundColor: Colors.blue,
-  //   ));
-  // }
   void signup(String username, String email, String password, String address,
       String phone) async {
     if (_formkey.currentState!.validate()) {
       try {
         var response = await http.post(
-          Uri.parse('http://192.168.100.46/api/register'),
+          Uri.parse('$baseUrl/register'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },

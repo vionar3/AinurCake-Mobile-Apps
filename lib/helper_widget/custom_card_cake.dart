@@ -7,6 +7,7 @@ class CustomCardCake extends StatefulWidget {
   final Function()? onTap;
 
   CustomCardCake({this.pic = '', this.name = '', this.price, this.onTap});
+  // CustomCardCake({this.name = '', this.price, this.onTap});
   @override
   State<CustomCardCake> createState() => _CustomCardCakeState();
 }
@@ -34,13 +35,13 @@ class _CustomCardCakeState extends State<CustomCardCake> {
               Container(
                 height: 90,
                 width: 120,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.0),
-                  image: DecorationImage(
-                    image: AssetImage(widget.pic!),
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                // decoration: BoxDecoration(
+                //   borderRadius: BorderRadius.circular(20.0),
+                //   image: DecorationImage(
+                //     image: AssetImage(widget.pic!),
+                //     fit: BoxFit.cover,
+                //   ),
+                // ),
               ),
               SizedBox(height: 12.0),
               Padding(
@@ -73,7 +74,7 @@ class _CustomCardCakeState extends State<CustomCardCake> {
                   Padding(
                     padding: const EdgeInsets.only(top: 5, left: 10),
                     child: Text(
-                      'Rs ' + widget.price!.toString(),
+                      'Rp ' + widget.price!.toString(),
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.bold,

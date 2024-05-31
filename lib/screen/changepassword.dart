@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ainurcake/api/api_service.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -47,8 +48,9 @@ class _ChangePasswordState extends State<ChangePassword> {
   Future<void> changePassword() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('user_token');
+    var apiService = ApiService();
 
-    var url = Uri.parse('http://192.168.100.46/api/change-password');
+    var url = Uri.parse('${apiService.baseUrl}/change-password');
     var response = await http.post(
       url,
       headers: {

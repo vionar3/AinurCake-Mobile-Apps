@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:ainurcake/model/user_model.dart';
+import 'package:ainurcake/api/api_service.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({Key? key}) : super(key: key);
@@ -24,8 +25,9 @@ class _UserProfileState extends State<UserProfile> {
   Future<void> _getUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('user_token');
+    var apiService = ApiService();
     if (token != null) {
-      var url = Uri.parse('http://192.168.100.46/api/user');
+      var url = Uri.parse('${apiService.baseUrl}/user');
       var response = await http.get(url, headers: {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
