@@ -1,6 +1,7 @@
 import 'package:ainurcake/model/cart_model.dart';
 import 'package:flutter/material.dart';
 import 'package:ainurcake/screen/order_now.dart';
+import 'package:ainurcake/api/api_service.dart';
 
 class Carts extends StatefulWidget {
   final List<CartModel> cartDetail;
@@ -12,6 +13,7 @@ class Carts extends StatefulWidget {
 }
 
 class _CartsState extends State<Carts> {
+  final ApiService _apiService = ApiService();
   void _updateQuantity(int index, int quantity) {
     setState(() {
       widget.cartDetail[index].quantity = quantity;
@@ -84,7 +86,10 @@ class _CartsState extends State<Carts> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
               child: ListTile(
-                // leading: Image.asset(widget.cartDetail[index].image!),
+                leading: Image.network(
+                  "${_apiService.imageurl}${widget.cartDetail[index].image!}",
+                  fit: BoxFit.cover,
+                ),
                 title: Text(widget.cartDetail[index].name!),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

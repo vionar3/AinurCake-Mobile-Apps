@@ -2,6 +2,7 @@ import 'package:ainurcake/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:ainurcake/model/cart_model.dart';
+import 'package:ainurcake/api/api_service.dart';
 
 class OrderNow extends StatefulWidget {
   final List<CartModel> cartDetail;
@@ -13,6 +14,7 @@ class OrderNow extends StatefulWidget {
 }
 
 class _OrderNowState extends State<OrderNow> {
+  final ApiService _apiService = ApiService();
   int gvalue = 1;
   UserModel loggedInUser = UserModel();
   DateTime? _pickupDate;
@@ -315,7 +317,10 @@ class _OrderNowState extends State<OrderNow> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
                       child: ListTile(
-                        // leading: Image.asset(widget.cartDetail[index].image!),
+                        leading: Image.network(
+                          "${_apiService.imageurl}${widget.cartDetail[index].image!}",
+                          fit: BoxFit.cover,
+                        ),
                         title: Text(widget.cartDetail[index].name!),
                         subtitle: Text("Rs " +
                             widget.cartDetail[index].price.toString() +

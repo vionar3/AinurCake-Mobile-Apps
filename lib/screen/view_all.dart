@@ -78,14 +78,14 @@ class _CakeScreenState extends State<ViewCake> {
           shrinkWrap: true,
           itemBuilder: (BuildContext context, int index) {
             return CustomCardCake(
-              // pic: allCakes[index].image,
+              pic: allCakes[index].image,
               name: allCakes[index].name,
               price: allCakes[index].price,
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => ProductDetail(
-                      // pr_picture: allCakes[index].image,
+                      pr_picture: allCakes[index].image,
                       pr_name: allCakes[index].name,
                       price: allCakes[index].price,
                       cartdetail: cartdetail,

@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:ainurcake/api/api_service.dart';
 
 class CustomCard extends StatefulWidget {
-  // final String? cpic;
+  final String? cpic;
   final String? cname;
   final Function()? onTap;
 
-  CustomCard({this.cname, this.onTap});
+  CustomCard({this.cpic, this.cname, this.onTap});
 
   @override
   State<CustomCard> createState() => _CustomCardState();
 }
 
 class _CustomCardState extends State<CustomCard> {
+  final ApiService _apiService = ApiService();
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -36,13 +38,14 @@ class _CustomCardState extends State<CustomCard> {
               Container(
                 height: 120,
                 width: 120,
-                // decoration: BoxDecoration(
-                //   borderRadius: BorderRadius.circular(20.0),
-                //   image: DecorationImage(
-                //     image: AssetImage(widget.cpic!),
-                //     fit: BoxFit.cover,
-                //   ),
-                // ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.0),
+                  image: DecorationImage(
+                    image:
+                        NetworkImage("${_apiService.imageurl}${widget.cpic}"),
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
               SizedBox(height: 12.0),
               Padding(
