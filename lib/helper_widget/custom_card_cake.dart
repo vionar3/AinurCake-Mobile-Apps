@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ainurcake/api/api_service.dart';
 
 class CustomCardCake extends StatefulWidget {
   final String? pic;
@@ -13,6 +14,7 @@ class CustomCardCake extends StatefulWidget {
 }
 
 class _CustomCardCakeState extends State<CustomCardCake> {
+  final ApiService _apiService = ApiService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,13 +37,13 @@ class _CustomCardCakeState extends State<CustomCardCake> {
               Container(
                 height: 90,
                 width: 120,
-                // decoration: BoxDecoration(
-                //   borderRadius: BorderRadius.circular(20.0),
-                //   image: DecorationImage(
-                //     image: AssetImage(widget.pic!),
-                //     fit: BoxFit.cover,
-                //   ),
-                // ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.0),
+                  image: DecorationImage(
+                    image: NetworkImage("${_apiService.imageurl}${widget.pic}"),
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
               SizedBox(height: 12.0),
               Padding(

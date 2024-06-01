@@ -292,6 +292,7 @@ class _HomePageState extends State<HomePage> {
                             shrinkWrap: true,
                             itemBuilder: (BuildContext context, int index) {
                               return CustomCard(
+                                cpic: categories[index].image,
                                 cname: categories[index].name,
                                 onTap: () {
                                   int categoryId =

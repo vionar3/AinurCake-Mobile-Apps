@@ -9,7 +9,7 @@ class CategoryModel {
     return CategoryModel(
       id: json['category_id'],
       name: json['category_name'],
-      image: json['category-image'],
+      image: json['category_image'],
     );
   }
 }

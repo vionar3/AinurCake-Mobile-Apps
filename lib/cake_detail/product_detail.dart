@@ -2,20 +2,22 @@ import 'package:ainurcake/cart/cart_page.dart';
 import 'package:ainurcake/model/cart_model.dart';
 import 'package:ainurcake/screen/order_now.dart';
 import 'package:flutter/material.dart';
+import 'package:ainurcake/api/api_service.dart';
 
 class ProductDetail extends StatefulWidget {
-  // final pr_picture;
+  final pr_picture;
   final pr_name;
   final price;
   final cartdetail;
 
-  ProductDetail({this.pr_name, this.price, this.cartdetail});
+  ProductDetail({this.pr_picture, this.pr_name, this.price, this.cartdetail});
 
   @override
   State<ProductDetail> createState() => _ProductDetailState();
 }
 
 class _ProductDetailState extends State<ProductDetail> {
+  final ApiService _apiService = ApiService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +39,10 @@ class _ProductDetailState extends State<ProductDetail> {
             child: GridTile(
               child: Container(
                 color: Colors.white,
-                // child: Image.asset(widget.pr_picture!),
+                child: Image.network(
+                  "${_apiService.imageurl}${widget.pr_picture}",
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
@@ -99,7 +104,7 @@ class _ProductDetailState extends State<ProductDetail> {
                         child: TextButton(
                           onPressed: () {
                             widget.cartdetail.add(CartModel(
-                                // image: widget.pr_picture,
+                                image: widget.pr_picture,
                                 name: widget.pr_name,
                                 price: widget.price));
                             // print("carddetail");
@@ -131,7 +136,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                             color: Colors.blue)))),
                             onPressed: () {
                               widget.cartdetail.add(CartModel(
-                                  // image: widget.pr_picture,
+                                  image: widget.pr_picture,
                                   name: widget.pr_name,
                                   price: widget.price));
                               // print("cardetail");

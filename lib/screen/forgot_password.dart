@@ -15,34 +15,34 @@ class _forgotPasswordState extends State<forgotPassword> {
   var email = "";
   final emailController = TextEditingController();
 
-  @override
-  void dispose() {
-    emailController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   emailController.dispose();
+  //   super.dispose();
+  // }
 
-  forgotPass() async {
-    try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text(
-          "Password Rest Email has been sent !",
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Colors.blue,
-      ));
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-            "No user found that email",
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: Colors.blue,
-        ));
-      }
-    }
-  }
+  // forgotPass() async {
+  //   try {
+  //     await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+  //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+  //       content: Text(
+  //         "Password Rest Email has been sent !",
+  //         style: TextStyle(color: Colors.white),
+  //       ),
+  //       backgroundColor: Colors.blue,
+  //     ));
+  //   } on FirebaseAuthException catch (e) {
+  //     if (e.code == 'user-not-found') {
+  //       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+  //         content: Text(
+  //           "No user found that email",
+  //           style: TextStyle(color: Colors.white),
+  //         ),
+  //         backgroundColor: Colors.blue,
+  //       ));
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -115,12 +115,13 @@ class _forgotPasswordState extends State<forgotPassword> {
                                         borderRadius:
                                             BorderRadius.circular(10)))),
                             onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                setState(() {
-                                  email = emailController.text;
-                                });
-                              }
-                              forgotPass();
+                              print("otp");
+                              // if (_formKey.currentState!.validate()) {
+                              //   setState(() {
+                              //     email = emailController.text;
+                              //   });
+                              // }
+                              // forgotPass();
                             },
                             child: const Text(
                               'Send',
