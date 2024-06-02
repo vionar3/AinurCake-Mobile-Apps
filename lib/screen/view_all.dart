@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:ainurcake/cake_detail/product_detail.dart';
 import 'package:ainurcake/cart/cart_page.dart';
 import 'package:ainurcake/helper_widget/custom_card_cake.dart';
+import 'package:ainurcake/shimmer/card_shimmer_effect.dart'; // Pastikan jalur impor ini benar
 import 'package:ainurcake/model/cart_model.dart';
 import 'package:ainurcake/model/product_model.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ class _CakeScreenState extends State<ViewCake> {
   TextEditingController searchController = TextEditingController();
   List<CartModel> cartdetail = [];
   List<ProductModel> allCakes = [];
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -28,13 +30,13 @@ class _CakeScreenState extends State<ViewCake> {
 
   Future<void> fetchProduct() async {
     var apiService = ApiService();
-    // final String baseUrl = "http://192.168.100.50/api";
     final response = await http.get(Uri.parse('${apiService.baseUrl}/product'));
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
       setState(() {
         allCakes =
             jsonResponse.map((data) => ProductModel.fromJson(data)).toList();
+        isLoading = false;
       });
     } else {
       throw Exception('Failed to load products');
@@ -73,27 +75,31 @@ class _CakeScreenState extends State<ViewCake> {
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2, mainAxisExtent: 230),
           scrollDirection: Axis.vertical,
-          itemCount: allCakes.length,
+          itemCount: isLoading ? 6 : allCakes.length,
           primary: false,
           shrinkWrap: true,
           itemBuilder: (BuildContext context, int index) {
-            return CustomCardCake(
-              pic: allCakes[index].image,
-              name: allCakes[index].name,
-              price: allCakes[index].price,
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => ProductDetail(
-                      pr_picture: allCakes[index].image,
-                      pr_name: allCakes[index].name,
-                      price: allCakes[index].price,
-                      cartdetail: cartdetail,
+            if (isLoading) {
+              return CustomCardShimmer();
+            } else {
+              return CustomCardCake(
+                pic: allCakes[index].image,
+                name: allCakes[index].name,
+                price: allCakes[index].price,
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ProductDetail(
+                        pr_picture: allCakes[index].image,
+                        pr_name: allCakes[index].name,
+                        price: allCakes[index].price,
+                        cartdetail: cartdetail,
+                      ),
                     ),
-                  ),
-                );
-              },
-            );
+                  );
+                },
+              );
+            }
           },
         ),
       ),
