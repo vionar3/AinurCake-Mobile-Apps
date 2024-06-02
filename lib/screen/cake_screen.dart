@@ -7,6 +7,7 @@ import 'package:ainurcake/model/product_model.dart';
 import 'package:ainurcake/api/api_service.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:ainurcake/shimmer/card_shimmer_effect.dart';
 import 'package:badges/badges.dart' as badges;
 
 class CakeScreen extends StatefulWidget {
@@ -22,6 +23,7 @@ class CakeScreen extends StatefulWidget {
 class _CakeScreenState extends State<CakeScreen> {
   List<ProductModel> mylist = [];
   final List<CartModel> cart = CartModel.cart();
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -30,8 +32,6 @@ class _CakeScreenState extends State<CakeScreen> {
   }
 
   Future<List<ProductModel>> fetchProductsByCategory(int categoryId) async {
-    // final String baseUrl = "http://192.168.100.50/api";
-
     var apiService = ApiService();
     final response = await http.get(
         Uri.parse('${apiService.baseUrl}/categories/$categoryId/products'));
@@ -49,9 +49,13 @@ class _CakeScreenState extends State<CakeScreen> {
           await fetchProductsByCategory(widget.categoryId);
       setState(() {
         mylist = products;
+        isLoading = false;
       });
     } catch (e) {
       print('Failed to load products: $e');
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -91,30 +95,42 @@ class _CakeScreenState extends State<CakeScreen> {
       body: SingleChildScrollView(
         child: Stack(
           children: [
-            GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, mainAxisExtent: 230),
-              scrollDirection: Axis.vertical,
-              itemCount: mylist.length,
-              primary: false,
-              shrinkWrap: true,
-              itemBuilder: (BuildContext context, int index) {
-                return CustomCardCake(
-                  pic: mylist[index].image,
-                  name: mylist[index].name,
-                  price: mylist[index].price,
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ProductDetail(
-                              pr_picture: mylist[index].image,
-                              pr_name: mylist[index].name,
-                              price: mylist[index].price,
-                              cartdetail: cart,
-                            )));
-                  },
-                );
-              },
-            ),
+            isLoading
+                ? GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2, mainAxisExtent: 230),
+                    itemCount: 6,
+                    primary: false,
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int index) {
+                      return CustomCardShimmer();
+                    },
+                  )
+                : GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2, mainAxisExtent: 230),
+                    itemCount: mylist.length,
+                    primary: false,
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int index) {
+                      return CustomCardCake(
+                        pic: mylist[index].image,
+                        name: mylist[index].name,
+                        price: mylist[index].price,
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ProductDetail(
+                                    pr_picture: mylist[index].image,
+                                    pr_name: mylist[index].name,
+                                    price: mylist[index].price,
+                                    cartdetail: cart,
+                                  )));
+                        },
+                      );
+                    },
+                  ),
           ],
         ),
       ),
